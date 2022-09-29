@@ -124,7 +124,7 @@ const removeItem=()=>{
           )}
         </div>
       ) : (
-        <h1>LOADING</h1>
+        <h1 className="font-semibold text-3xl text-center mt-[8rem] sm:mt-[16rem]">LOADING...</h1>
       )}
     </>
   );
