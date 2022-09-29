@@ -1,34 +1,103 @@
-import React, { useState } from 'react'
-import { useDispatch } from 'react-redux'
-import { useNavigate } from 'react-router-dom'
-import { createPost } from './postSlice'
-
+import { nanoid } from "@reduxjs/toolkit";
+import React, { useEffect, useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { useAsyncError, useNavigate } from "react-router-dom";
+import { createPost, deletePost } from "./postSlice";
 
 const CreatePost = () => {
-  const [title,setTitle]=useState("")
-  const [body,setBody]=useState("")
-  const navigate=useNavigate()
-  const dispatch=useDispatch()
+  const [title, setTitle] = useState("");
+  const [body, setBody] = useState("");
+  const [values,setValues]=useState({
+    title:"",
+    body:""
+  })
+  const [show, setShow] = useState(false);
+  const navigate = useNavigate();
+  const dispatch = useDispatch();
+  const post=useSelector((state)=>state.post.post)
 
-
+  useEffect(() => {
+    setValues({
+      title:title,
+      body:body,
+    })
+  }, [title,body])
+  
   const handleSubmit = (e) => {
     e.preventDefault();
-    dispatch(createPost({title,body}))
-    setTitle("")
-    setBody("")
+     setValues({
+      title:title,
+      body:body,
+    })
+    dispatch(createPost({ values}));
+    setTitle("");
+    setBody("");
+    setShow(true);
   };
+
+  console.log(post);
+
   return (
     <>
-    <form onSubmit={handleSubmit}>
-      <input type="text" value={title} onChange={(e)=>setTitle(e.target.value)} className='border border-1 border-black'/>
-      <input type="text" value={body} onChange={(e)=>setBody(e.target.value)} className='border border-1 border-black'/>
-      <button onClick={()=>navigate(-1)}>GO BACK</button>
-      <button>SUBMIT</button>
-
-
-    </form>
+      <form className="container m-auto mt-9">
+        <div className="flex flex-col justify-center items-center mt-3">
+          <label htmlFor="title" className="font-bold text-xl">
+            TITLE
+          </label>
+          <input
+            id="title"
+            type="text"
+            value={title}
+            onChange={(e) => setTitle(e.target.value)}
+            className="border border-1 border-black w-full max-w-[30rem] mt-2 p-1"
+          />
+        </div>
+        <div className="flex flex-col justify-center items-center mt-3">
+          <label htmlFor="title" className="font-bold text-xl">
+            TEXT
+          </label>
+          <input
+            id="text"
+            type="text"
+            value={body}
+            onChange={(e) => setBody(e.target.value)}
+            className="border border-1 border-black w-full max-w-[30rem] mt-2 p-1"
+          />
+        </div>
+        <div className="flex justify-center items-center mt-7 gap-x-6 font-semibold">
+          <button
+            onClick={() => navigate("/")}
+            className="bg-green-400 w-[6rem] py-1"
+          >
+            GO BACK
+          </button>
+          <button
+            type="submit"
+            className="bg-cyan-400 w-[6rem] py-1"
+            onClick={handleSubmit}
+          >
+            SUBMIT
+          </button>
+        </div>
+      </form>
+      { show &&
+        <section className="mt-9 text-center">
+          {
+            post?.map((item)=>{
+              const {title,body}=item
+              return(
+                <>
+                  <p className="font-bold capitalize">{title}</p>
+                  <p className="capitalize">{body}</p>
+                </>
+              )
+            })
+          }
+       
+        </section>
+      }
     </>
-  )
-}
+  );
+};
 
-export default CreatePost
+export default CreatePost;

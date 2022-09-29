@@ -1,15 +1,19 @@
- import {createSlice,createAsyncThunk} from "@reduxjs/toolkit"
+ import {createSlice,createAsyncThunk, } from "@reduxjs/toolkit"
 
-
+//GET
  export const getPost= createAsyncThunk("post/getPost",async(id)=>{
     return fetch(`https://jsonplaceholder.typicode.com/posts/${id}`).then((res)=>res.json())
  })
- export const deletePost= createAsyncThunk("post/deletePost",async(id)=>{
+
+ //DELETE
+ export const deletePost= createAsyncThunk("post/deletePost",async({id})=>{
     return fetch(`https://jsonplaceholder.typicode.com/posts/${id}`,{
         method:"DELETE",
     }).then((res)=>res.json())
  })
- export const createPost= createAsyncThunk("post/createPost",async(title,body)=>{
+
+ //POST
+ export const createPost= createAsyncThunk("post/createPost",async({values})=>{
     return fetch(`https://jsonplaceholder.typicode.com/posts/`,{
         method:"POST",
         headers:{
@@ -17,20 +21,20 @@
             "Content-type":"application/json",
         },
         body:JSON.stringify({
-            title:title,
-            body:body,
+            title:values.title,
+            body:values.body,
         })
     }).then((res)=>res.json())
  })
- export const updatePost= createAsyncThunk("post/createPost",async(id,title,body)=>{
+ //UPDATE
+ export const updatePost= createAsyncThunk("post/updatePost",async({id,title,body})=>{
     return fetch(`https://jsonplaceholder.typicode.com/posts/${id}`,{
-        method:"UPDATE",
+        method:"PUT",
         headers:{
             Accept:"application/json",
             "Content-type":"application/json",
         },
         body:JSON.stringify({
-            id,
             title,
             body,
         })
