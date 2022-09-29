@@ -19,7 +19,7 @@ console.log(post);
   const fetchUserPost = () => {
     if (id) {
       if(isNaN(id)){
-        toastWarnNotify("Please enter a number")
+        toastWarnNotify("Please enter a valid number")
       }else{
         dispatch(getPost(id));
       }
