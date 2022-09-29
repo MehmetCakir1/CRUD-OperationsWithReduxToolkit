@@ -12,8 +12,8 @@ const UserPost = () => {
   const loading = useSelector((state) => state.post.loading);
   const edit = useSelector((state) => state.post.edit);
   const body = useSelector((state) => state.post.body);
-  console.log(post);
-  console.log(body);
+//   console.log(post);
+//   console.log(body);
 
 
   const fetchUserPost = () => {
@@ -29,7 +29,7 @@ const UserPost = () => {
   return (
     <>
       {!loading ? (
-        <div className="container m-auto">
+        <div className="container m-auto mt-5 md:mt-9">
           <h1 className="text-3xl font-bold text-blue-700 text-center my-3">
             FETCH POST
           </h1>
@@ -39,9 +39,10 @@ const UserPost = () => {
               value={id}
               onChange={(e) => setId(e.target.value)}
               className="border border-1 border-black w-full max-w-[30rem] p-1"
+              placeholder="Enter User ID (1-100)"
             />
           </div>
-          <div className="flex flex-col sm:flex-row justify-center items-center gap-x-4  font-bold">
+          <div className="flex flex-col sm:flex-row justify-center items-center gap-x-5  font-bold sm:mt-3">
             <button
               onClick={fetchUserPost}
               className="bg-green-300 py-1  w-[10rem] mt-3"
@@ -89,7 +90,7 @@ const UserPost = () => {
             )}
           </section>
           {!edit && post[0]?.title && (
-            <aside className="flex gap-x-4 justify-end md:px-12 mt-4 font-semibold">
+            <aside className="flex gap-x-4 justify-center sm:justify-end md:px-12 mt-4 font-semibold">
               <button
                 className="bg-red-400 w-[5rem] rounded-md"
                 onClick={() => dispatch(deletePost(id))}
