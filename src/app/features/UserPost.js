@@ -18,10 +18,14 @@ console.log(post);
 
   const fetchUserPost = () => {
     if (id) {
-      dispatch(getPost(id));
+      if(isNaN(id)){
+        toastWarnNotify("Please enter a number")
+      }else{
+        dispatch(getPost(id));
+      }
     }else{
-        toastWarnNotify("Please don't leave any fields blank")
-    }
+      toastWarnNotify("Please don't leave any fields blank")
+      }
     setId("");
   };
 
