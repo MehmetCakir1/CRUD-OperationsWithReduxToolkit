@@ -1,8 +1,8 @@
-import { nanoid } from "@reduxjs/toolkit";
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { useAsyncError, useNavigate } from "react-router-dom";
-import { createPost, deletePost } from "./postSlice";
+import {  useNavigate } from "react-router-dom";
+import { toastSuccessNotify, toastWarnNotify } from "../../helpers/toastify";
+import { createPost } from "./postSlice";
 
 const CreatePost = () => {
   const [title, setTitle] = useState("");
@@ -25,7 +25,8 @@ const CreatePost = () => {
   
   const handleSubmit = (e) => {
     e.preventDefault();
-     setValues({
+    if(title && body){
+      setValues({
       title:title,
       body:body,
     })
@@ -33,15 +34,19 @@ const CreatePost = () => {
     setTitle("");
     setBody("");
     setShow(true);
+    toastSuccessNotify("New post created successfully")
+    }else{
+      toastWarnNotify("Please don't leave any fields blank")
+    }
   };
 
-  console.log(post);
+  // console.log(post);
 
   return (
     <>
       <form className="container m-auto mt-9">
         <div className="flex flex-col justify-center items-center mt-3">
-          <label htmlFor="title" className="font-bold text-xl">
+          <label htmlFor="title" className="font-bold text-xl text-red-600">
             TITLE
           </label>
           <input
@@ -53,7 +58,7 @@ const CreatePost = () => {
           />
         </div>
         <div className="flex flex-col justify-center items-center mt-3">
-          <label htmlFor="title" className="font-bold text-xl">
+          <label htmlFor="title" className="font-bold text-xl text-red-600">
             TEXT
           </label>
           <input
@@ -84,12 +89,12 @@ const CreatePost = () => {
         <section className="mt-9 text-center">
           {
             post?.map((item)=>{
-              const {title,body}=item
+              const {title,body,id}=item
               return(
-                <>
+                <div key={id}>
                   <p className="font-bold capitalize">{title}</p>
                   <p className="capitalize">{body}</p>
-                </>
+                </div>
               )
             })
           }

@@ -1,4 +1,5 @@
  import {createSlice,createAsyncThunk, } from "@reduxjs/toolkit"
+import { toastSuccessNotify } from "../../helpers/toastify"
 
 //GET
  export const getPost= createAsyncThunk("post/getPost",async(id)=>{
@@ -10,6 +11,7 @@
     return fetch(`https://jsonplaceholder.typicode.com/posts/${id}`,{
         method:"DELETE",
     }).then((res)=>res.json())
+    
  })
 
  //POST

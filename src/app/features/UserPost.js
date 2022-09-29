@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
+import { toastSuccessNotify, toastWarnNotify } from "../../helpers/toastify";
 import { getPost, deletePost, editItem,updatePost } from "./postSlice";
 
 const UserPost = () => {
@@ -12,16 +13,39 @@ const UserPost = () => {
   const loading = useSelector((state) => state.post.loading);
   const edit = useSelector((state) => state.post.edit);
   const body = useSelector((state) => state.post.body);
-//   console.log(post);
-//   console.log(body);
 
+console.log(post);
 
   const fetchUserPost = () => {
     if (id) {
       dispatch(getPost(id));
+    }else{
+        toastWarnNotify("Please don't leave any fields blank")
     }
     setId("");
   };
+
+const saveEdittedPost=()=>{
+    if(bodyText){
+        dispatch(
+            updatePost({
+                 id:post[0].id,
+                 title:post[0].title,
+                 body:bodyText })
+                 );
+          dispatch(
+            editItem({ edit: false, body: bodyText })
+            );
+            toastSuccessNotify("Post editted successfully")
+    }else{
+        toastWarnNotify("Please don't leave any fields blank")
+    }
+}
+const removeItem=()=>{
+    dispatch(deletePost(id))
+    toastSuccessNotify("Post deleted successfully")
+}
+
   useEffect(() => {
     setBodyText(body);
   }, [body]);
@@ -69,17 +93,8 @@ const UserPost = () => {
                   onChange={(e) => setBodyText(e.target.value)}
                 />
                 <div className="flex gap-x-4 justify-center items-center mt-2 font-semibold">
-                    <button className="bg-teal-400 w-[5rem] py-1 "  onClick={() =>{
-                  dispatch(
-                    updatePost({
-                         id:post[0].id,
-                         title:post[0].title,
-                         body:bodyText })
-                         );
-                  dispatch(
-                    editItem({ edit: false, body: bodyText })
-                    );
-                    }}
+                    <button className="bg-teal-400 w-[5rem] py-1 "  onClick={saveEdittedPost}
+
               >SAVE</button>
                     <button className="bg-slate-400 w-[5rem] py-1 "  onClick={() =>
                   dispatch(editItem({ edit: false, body: bodyText }))
@@ -93,7 +108,7 @@ const UserPost = () => {
             <aside className="flex gap-x-4 justify-center sm:justify-end md:px-12 mt-4 font-semibold">
               <button
                 className="bg-red-400 w-[5rem] rounded-md"
-                onClick={() => dispatch(deletePost(id))}
+                onClick={removeItem}
               >
                 DELETE
               </button>
